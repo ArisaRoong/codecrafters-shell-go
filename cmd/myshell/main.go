@@ -21,7 +21,7 @@ func main() {
 			fmt.Errorf("Error processing command: %s", input)
 		}
 
-		input = strings.Trim(input, "\n")
+		input = strings.TrimSpace(input)
 		inputSlice := strings.SplitAfterN(input, " ", 2)
 		cmd := inputSlice[0]
 		val := inputSlice[1]
@@ -35,7 +35,7 @@ func main() {
 		// Type command
 		case "type":
 			GetType(val)
-		//  Echo command
+		// Echo command
 		case "echo":
 			fmt.Fprintf(os.Stdout, "%s", val)
 		// Invalid command
