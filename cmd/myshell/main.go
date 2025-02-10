@@ -17,11 +17,17 @@ func main() {
 		fmt.Fprint(os.Stdout, "$ ")
 		// Wait for user input
 		input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
+		input = strings.Trim(input, "\n")
 
 		// Return input as invalid
-		fmt.Fprintf(os.Stdout, "%s: command not found", strings.TrimSpace(input))
+		fmt.Fprintf(os.Stdout, "%s: command not found", input)
 		fmt.Fprintf(os.Stdout, "\n")
-		os.Exit(0)
+
+		// Exit Condition
+		if strings.HasPrefix(input, "exit") && strings.HasSuffix(input, "0") {
+			os.Exit(0)
+		}
+
 	}
 
 }
