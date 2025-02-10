@@ -21,6 +21,7 @@ func main() {
 		// Return input as invalid
 		fmt.Fprintf(os.Stdout, "%s: command not found", strings.TrimSpace(input))
 		fmt.Fprintf(os.Stdout, "\n")
+		os.Exit(0)
 	}
 
 }
