@@ -20,7 +20,7 @@ func main() {
 		input = strings.Trim(input, "\n")
 
 		// Exit Condition
-		if strings.HasPrefix(input, "exit") && strings.HasSuffix(input, "0") {
+		if input == "exit 0" {
 			os.Exit(0)
 		} else {
 			// Return input as invalid
