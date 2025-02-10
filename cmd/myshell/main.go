@@ -25,7 +25,7 @@ func main() {
 			os.Exit(0)
 		// Echo condition
 		case strings.HasPrefix(input, "echo"):
-			fmt.Fprintf(os.Stdout, "%s", input)
+			fmt.Fprintf(os.Stdout, "%s", strings.TrimPrefix(input, "echo "))
 		// Invalid command
 		default:
 			fmt.Fprintf(os.Stdout, "%s: command not found", input)
