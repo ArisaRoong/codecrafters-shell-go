@@ -35,7 +35,7 @@ func main() {
 		// Type command
 		case "type":
 			GetType(val)
-		// Echo command
+		//  Echo command
 		case "echo":
 			fmt.Fprintf(os.Stdout, "%s", val)
 		// Invalid command
