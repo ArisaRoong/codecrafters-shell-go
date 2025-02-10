@@ -14,10 +14,12 @@ func main() {
 	// Uncomment this block to pass the first stage
 	fmt.Fprint(os.Stdout, "$ ")
 
-	// Wait for user input
-	input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
+	for {
+		// Wait for user input
+		input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 
-	// Return input as invalid
-	fmt.Fprintf(os.Stdout, "%s: command not found", strings.TrimSpace(input))
+		// Return input as invalid
+		fmt.Fprintf(os.Stdout, "%s: command not found", strings.TrimSpace(input))
+	}
 
 }
