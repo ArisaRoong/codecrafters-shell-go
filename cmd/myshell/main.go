@@ -19,14 +19,19 @@ func main() {
 		input, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 		input = strings.Trim(input, "\n")
 
-		// Exit Condition
-		if input == "exit 0" {
+		switch {
+		// Exit condition
+		case input == "exit 0":
 			os.Exit(0)
-		} else {
-			// Return input as invalid
+		// Echo condition
+		case strings.HasPrefix(input, "echo"):
+			fmt.Fprintf(os.Stdout, "%s", input)
+		// Invalid command
+		default:
 			fmt.Fprintf(os.Stdout, "%s: command not found", input)
-			fmt.Fprintf(os.Stdout, "\n")
 		}
+
+		fmt.Fprintf(os.Stdout, "\n")
 
 	}
 
