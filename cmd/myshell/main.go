@@ -22,7 +22,7 @@ func main() {
 		}
 
 		input = strings.Trim(input, "\n")
-		inputSlice := strings.Split(input, " ")
+		inputSlice := strings.SplitAfterN(input, " ", 2)
 		cmd := inputSlice[0]
 		val := inputSlice[1]
 
