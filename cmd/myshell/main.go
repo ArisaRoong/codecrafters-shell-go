@@ -21,10 +21,15 @@ func main() {
 			fmt.Errorf("Error processing command: %s", input)
 		}
 
-		input = strings.TrimSpace(input)
+		// Split the input into the command and the value
+		input = strings.Trim(input, "\n")
 		inputSlice := strings.SplitAfterN(input, " ", 2)
 		cmd := inputSlice[0]
-		val := inputSlice[1]
+		cmd = strings.Trim(cmd, " ")
+		var val string
+		if len(inputSlice) > 1 {
+			val = inputSlice[1]
+		}
 
 		switch cmd {
 		// Exit command
