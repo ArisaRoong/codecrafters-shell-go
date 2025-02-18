@@ -13,7 +13,6 @@ var _ = fmt.Fprint
 func main() {
 
 	for {
-		// Uncomment this block to pass the first stage
 		fmt.Fprint(os.Stdout, "$ ")
 		// Wait for user input
 		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
@@ -39,7 +38,12 @@ func main() {
 			}
 		// Type command
 		case "type":
-			GetType(val)
+			path, valid := IsValidCommand(val)
+			if valid && val != "echo" {
+				fmt.Fprintf(os.Stdout, "%s is %s", val, path)
+			} else {
+				TypeCommand(val)
+			}
 		// Echo command
 		case "echo":
 			fmt.Fprintf(os.Stdout, "%s", val)
@@ -54,10 +58,21 @@ func main() {
 
 }
 
-func GetType(t string) {
+func TypeCommand(t string) {
 	if t == "echo" || t == "exit" || t == "type" {
 		fmt.Fprintf(os.Stdout, "%s is a shell builtin", t)
 	} else {
 		fmt.Fprintf(os.Stdout, "%s: not found", t)
 	}
+}
+
+func IsValidCommand(input string) (string, bool) {
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	for _, path := range paths {
+		fullPath := path + "/" + input
+		if _, err := os.Stat(fullPath); err == nil {
+			return fullPath, true
+		}
+	}
+	return "", false
 }
