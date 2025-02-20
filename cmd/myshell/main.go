@@ -61,7 +61,11 @@ func main() {
 				fmt.Errorf("Error processing %s command. Error: %v\n", cmd, err)
 			}
 			fmt.Fprintf(os.Stdout, "%s\n", dir)
-
+		case "cd":
+			err = os.Chdir(val)
+			if err != nil {
+				fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", val)
+			}
 		default:
 			// Executable
 			command := exec.Command(cmd, val)
