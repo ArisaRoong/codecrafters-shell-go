@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ func main() {
 		// Wait for user input
 		input, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		if err != nil {
-			fmt.Errorf("Error processing command: %s", input)
+			fmt.Errorf("Error processing command: %s\n", input)
 		}
 
 		// Split the input into the command and the value
@@ -40,19 +41,23 @@ func main() {
 		case "type":
 			path, valid := IsValidCommand(val)
 			if valid && val != "echo" {
-				fmt.Fprintf(os.Stdout, "%s is %s", val, path)
+				fmt.Fprintf(os.Stdout, "%s is %s\n", val, path)
 			} else {
 				TypeCommand(val)
 			}
 		// Echo command
 		case "echo":
-			fmt.Fprintf(os.Stdout, "%s", val)
-		// Invalid command
+			fmt.Fprintf(os.Stdout, "%s\n", val)
 		default:
-			fmt.Fprintf(os.Stdout, "%s: command not found", cmd)
+			// Executable
+			command := exec.Command(cmd, val)
+			command.Stderr = os.Stderr
+			command.Stdout = os.Stdout
+			err := command.Run()
+			if err != nil {
+				fmt.Fprintf(os.Stdout, "%s: command not found\n", cmd)
+			}
 		}
-
-		fmt.Fprintf(os.Stdout, "\n")
 
 	}
 
@@ -60,9 +65,9 @@ func main() {
 
 func TypeCommand(t string) {
 	if t == "echo" || t == "exit" || t == "type" {
-		fmt.Fprintf(os.Stdout, "%s is a shell builtin", t)
+		fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", t)
 	} else {
-		fmt.Fprintf(os.Stdout, "%s: not found", t)
+		fmt.Fprintf(os.Stdout, "%s: not found\n", t)
 	}
 }
 
