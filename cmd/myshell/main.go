@@ -5,11 +5,17 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 )
 
-// Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
-var _ = fmt.Fprint
+func GetBuiltIn() []string {
+	return []string{"echo", "exit", "type", "pwd"}
+}
+
+func TypeExceptions() []string {
+	return []string{"echo", "pwd"}
+}
 
 func main() {
 
@@ -40,7 +46,7 @@ func main() {
 		// Type command
 		case "type":
 			path, valid := IsValidCommand(val)
-			if valid && val != "echo" {
+			if valid && !slices.Contains(GetBuiltIn(), val) {
 				fmt.Fprintf(os.Stdout, "%s is %s\n", val, path)
 			} else {
 				TypeCommand(val)
@@ -48,6 +54,14 @@ func main() {
 		// Echo command
 		case "echo":
 			fmt.Fprintf(os.Stdout, "%s\n", val)
+		// Print working directory
+		case "pwd":
+			dir, err := os.Getwd()
+			if err != nil {
+				fmt.Errorf("Error processing %s command. Error: %v\n", cmd, err)
+			}
+			fmt.Fprintf(os.Stdout, "%s\n", dir)
+
 		default:
 			// Executable
 			command := exec.Command(cmd, val)
@@ -64,7 +78,7 @@ func main() {
 }
 
 func TypeCommand(t string) {
-	if t == "echo" || t == "exit" || t == "type" {
+	if slices.Contains(GetBuiltIn(), t) {
 		fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", t)
 	} else {
 		fmt.Fprintf(os.Stdout, "%s: not found\n", t)
