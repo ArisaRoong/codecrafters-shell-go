@@ -62,6 +62,14 @@ func main() {
 			}
 			fmt.Fprintf(os.Stdout, "%s\n", dir)
 		case "cd":
+			// Navigate to home directory
+			if val == "~" {
+				hdir, err := os.UserHomeDir()
+				if err != nil {
+					fmt.Fprintf(os.Stdout, "cd: %s: Error navigating to home directory\n", val)
+				}
+				val = hdir
+			}
 			err = os.Chdir(val)
 			if err != nil {
 				fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", val)
