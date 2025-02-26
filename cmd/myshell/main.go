@@ -53,6 +53,19 @@ func main() {
 			}
 		// Echo command
 		case "echo":
+			// Check for single quotes
+			if strings.HasPrefix(val, "'") && strings.HasSuffix(val, "'") {
+				outputSlice := strings.Split(val, "'")
+				var output string
+				for _, word := range outputSlice {
+					if word != "" {
+						output += word
+						val = output
+					}
+				}
+			} else {
+				val = strings.Join(strings.Fields(val), " ")
+			}
 			fmt.Fprintf(os.Stdout, "%s\n", val)
 		// Print working directory
 		case "pwd":
@@ -76,7 +89,8 @@ func main() {
 			}
 		default:
 			// Executable
-			command := exec.Command(cmd, val)
+			args := ParseArguments(val)
+			command := exec.Command(cmd, args...)
 			command.Stderr = os.Stderr
 			command.Stdout = os.Stdout
 			err := command.Run()
@@ -106,4 +120,22 @@ func IsValidCommand(input string) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func ParseArguments(s string) []string {
+	var tokens []string
+	for {
+		start := strings.Index(s, "'")
+		if start == -1 {
+			tokens = append(tokens, strings.Fields(s)...)
+			break
+		}
+		tokens = append(tokens, strings.Fields(s[:start])...)
+		s = s[start+1:]
+		end := strings.Index(s, "'")
+		token := s[:end]
+		tokens = append(tokens, token)
+		s = s[end+1:]
+	}
+	return tokens
 }
